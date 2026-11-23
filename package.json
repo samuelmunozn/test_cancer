@@ -1,0 +1,7 @@
+{
+  "name": "pretest-prevencion-cancer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pretest dinámico sobre hábitos saludables y prevención del cáncer (cuello uterino, próstata y colon)"
+}

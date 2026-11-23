@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pretest · Prevención del cáncer</title>
+<style>
+:root{--bg:#f2faf7;--card:#fff;--tx:#12372f;--mu:#5b7a72;--pr:#0f9b7a;--pr2:#0a6e57;--ac:#e8f7f1;--bd:#cfe8df;--ok:#1f9d55;--bad:#d9534f}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1f1b;--card:#14302a;--tx:#e6f5f0;--mu:#97b8ae;--pr:#2ec4a0;--pr2:#7fe3c8;--ac:#1a3d35;--bd:#265247;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+header{background:linear-gradient(135deg,var(--pr),#4cc9a7);color:#fff;border-radius:20px;padding:22px 20px;margin-bottom:16px}
+header small{opacity:.9;letter-spacing:.08em;font-weight:600}
+header h1{font-size:20px;margin:6px 0 8px;line-height:1.25}
+header p{margin:0;font-size:14px;opacity:.95}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:20px;margin-bottom:14px}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+input,textarea{width:100%;padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--pr)}
+.btn{display:inline-block;background:var(--pr);color:#fff;border:0;border-radius:12px;padding:13px 22px;font:600 16px inherit;cursor:pointer;margin-top:16px;margin-right:8px;text-decoration:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.ghost{background:var(--ac);color:var(--pr2)}
+.bar{height:8px;background:var(--ac);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--pr);transition:width .4s}
+.q{font-size:17px;font-weight:600;margin:0 0 14px}
+.opt{display:flex;gap:12px;width:100%;text-align:left;background:var(--bg);color:var(--tx);border:1.5px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px;font:15px/1.45 inherit;cursor:pointer}
+.opt b{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ac);color:var(--pr2);display:grid;place-items:center}
+.opt.sel{border-color:var(--pr);background:var(--ac)}.opt.sel b{background:var(--pr);color:#fff}
+.score{font-size:54px;font-weight:800;color:var(--pr);line-height:1}
+.res{border-left:5px solid var(--bad);padding:10px 12px;border-radius:10px;background:var(--card);margin:10px 0;font-size:14px}
+.res.ok{border-color:var(--ok)}.res h4{margin:0 0 4px;font-size:14px}
+.mu{color:var(--mu);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const TO="janethangelicanarvaezfigueroa@gmail.com";
+const Q=[
+{t:"¿Cuál de los siguientes grupos de hábitos contribuye a disminuir el riesgo de desarrollar cáncer de cuello uterino, próstata y colon?",
+o:["Mantener una alimentación equilibrada, realizar actividad física, evitar el consumo de tabaco y alcohol, y asistir a controles médicos periódicos.","Consumir suplementos vitamínicos y acudir al médico únicamente cuando se presenten síntomas.","Evitar el ejercicio físico, consumir alimentos ultraprocesados y realizar dietas restrictivas."],c:0,
+e:"Los hábitos saludables sostenidos (alimentación equilibrada, actividad física, evitar tabaco y alcohol) junto con los controles periódicos reducen el riesgo."},
+{t:"¿Cuáles son las principales medidas de prevención y detección temprana para estos tres tipos de cáncer?",
+o:["Realizar únicamente exámenes de sangre generales una vez al año.","Para cuello uterino: vacunación contra el VPH y tamización según edad y recomendaciones; para próstata: valoración médica y decisión informada sobre pruebas de detección; para colon: tamización según edad y riesgo.","Esperar a presentar dolor, sangrado o molestias para solicitar una valoración médica."],c:1,
+e:"Cada cáncer tiene su estrategia: vacuna y tamización (cuello uterino), valoración con decisión informada (próstata) y tamización según edad y riesgo (colon)."},
+{t:"¿Cuál de las siguientes afirmaciones sobre los estilos de vida saludables y el cáncer es correcta?",
+o:["El cáncer solamente afecta a personas con antecedentes familiares, por lo que los hábitos no influyen en su prevención.","Si una persona se siente saludable, no necesita realizarse pruebas de detección temprana.","Mantener un peso saludable, consumir frutas, verduras y alimentos ricos en fibra, realizar actividad física, evitar el tabaco y participar en los programas de tamización ayuda a reducir riesgos y detectar oportunamente algunos tipos de cáncer."],c:2,
+e:"Muchos cánceres no dan síntomas al inicio; los hábitos y la tamización ayudan a prevenir y detectar a tiempo."}];
+const L=["A","B","C"],app=document.getElementById("app");
+const S={step:"intro",i:0,ans:[],nombre:"",obs:"",fecha:new Date().toISOString().slice(0,10),status:"idle",score:0};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const head=`<header><small>PRETEST</small><h1>Hábitos y estilos de vida saludable para la prevención del cáncer</h1><p>Cuello uterino · Próstata · Colon</p></header>`;
+const render=()=>({intro,q:quiz,obs,done})[S.step]();
+
+function intro(){
+ app.innerHTML=head+`<div class="card"><p class="mu" style="margin-top:0">Objetivo: identificar los conocimientos previos sobre hábitos saludables y medidas de prevención del cáncer de cuello uterino, próstata y colon.</p>
+ <label>Nombre completo</label><input id="n" value="${esc(S.nombre)}" autocomplete="name">
+ <label>Fecha</label><input id="f" type="date" value="${S.fecha}">
+ <p class="mu">Lea cuidadosamente cada pregunta y elija la respuesta que considere correcta. Cada pregunta tiene una sola respuesta.</p>
+ <button class="btn" id="go" disabled>Comenzar</button></div>`;
+ const chk=()=>{S.nombre=n.value.trim();S.fecha=f.value;go.disabled=!(S.nombre&&S.fecha)};
+ n.oninput=f.oninput=chk;chk();
+ go.onclick=()=>{S.step="q";S.i=0;render()};
+}
+function quiz(){
+ const q=Q[S.i],sel=S.ans[S.i];
+ app.innerHTML=head+`<div class="bar"><i style="width:${(S.i/Q.length)*100}%"></i></div><div class="card"><p class="mu" style="margin-top:0">Pregunta ${S.i+1} de ${Q.length}</p><p class="q">${esc(q.t)}</p>
+ ${q.o.map((o,k)=>`<button class="opt ${sel===k?"sel":""}" data-k="${k}"><b>${L[k]}</b><span>${esc(o)}</span></button>`).join("")}
+ <button class="btn ghost" id="bk" ${S.i?"":"disabled"}>Atrás</button><button class="btn" id="nx" ${sel==null?"disabled":""}>${S.i===Q.length-1?"Continuar":"Siguiente"}</button></div>`;
+ app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{S.ans[S.i]=+b.dataset.k;quiz()});
+ bk.onclick=()=>{S.i--;quiz()};
+ nx.onclick=()=>{if(S.i===Q.length-1){S.step="obs";render()}else{S.i++;quiz()}};
+}
+function obs(){
+ app.innerHTML=head+`<div class="bar"><i style="width:100%"></i></div><div class="card"><label style="margin-top:0">Observaciones (opcional)</label><textarea id="ob" rows="4" maxlength="1000">${esc(S.obs)}</textarea>
+ <button class="btn ghost" id="bk">Atrás</button><button class="btn" id="en">Enviar respuestas</button></div>`;
+ bk.onclick=()=>{S.obs=ob.value;S.step="q";S.i=Q.length-1;render()};
+ en.onclick=()=>{S.obs=ob.value;enviar()};
+}
+async function enviar(){
+ S.score=Q.filter((q,k)=>S.ans[k]===q.c).length;S.step="done";S.status="sending";render();
+ try{
+  const r=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nombre:S.nombre,fecha:S.fecha,ans:S.ans,obs:S.obs})});
+  S.status=r.ok?"ok":"fail";
+ }catch(e){S.status="fail"}
+ render();
+}
+function mailHref(){
+ const c=`Nombre: ${S.nombre}\nFecha: ${S.fecha}\nRespuestas: 1-${L[S.ans[0]]}, 2-${L[S.ans[1]]}, 3-${L[S.ans[2]]}\nPuntaje: ${S.score}/${Q.length}\nObservaciones: ${S.obs||"-"}`;
+ return "mailto:"+TO+"?subject="+encodeURIComponent("Pretest prevención del cáncer - "+S.nombre)+"&body="+encodeURIComponent(c);
+}
+function done(){
+ const p=S.score/Q.length;
+ const msg=p===1?"¡Excelente! Tienes muy buenos conocimientos previos.":p>=.67?"¡Muy bien! Ya manejas buena parte del tema.":"Hay mucho por aprender y este es el punto de partida.";
+ const st={sending:"Enviando tus respuestas…",ok:"✓ Tus respuestas fueron enviadas correctamente."}[S.status]||`No se pudo enviar automáticamente. <a class="btn" href="${mailHref()}">✉ Enviar por correo</a><button class="btn ghost" id="rt">Reintentar</button>`;
+ app.innerHTML=head+`<div class="card" style="text-align:center"><div class="score">${S.score}/${Q.length}</div><p><b>${msg}</b></p><p class="mu">${st}</p></div>
+ ${Q.map((q,k)=>{const ok=S.ans[k]===q.c;return `<div class="res ${ok?"ok":""}"><h4>${ok?"✓":"✗"} Pregunta ${k+1}${ok?"":" · respuesta correcta: "+L[q.c]}</h4>${esc(q.e)}</div>`}).join("")}
+ <div class="card" style="background:var(--ac);text-align:center"><b>Gracias por su participación.</b><br>La prevención comienza con nuestras decisiones diarias. ¡Cuidarnos es una responsabilidad de todos!</div>`;
+ const rt=document.getElementById("rt");if(rt)rt.onclick=enviar;
+}
+render();
+</script>
+</body>
+</html>
