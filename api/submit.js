@@ -18,14 +18,14 @@ export default async function handler(req, res) {
 
   const key = process.env.RESEND_API_KEY;
   const to = process.env.TO_EMAIL || 'janethangelicanarvaezfigueroa@gmail.com';
-  const from = process.env.FROM_EMAIL || 'Pretest Prevención del Cáncer <onboarding@resend.dev>';
+  const from = process.env.FROM_EMAIL || 'Post test Prevención del Cáncer <onboarding@resend.dev>';
   if (!key) return res.status(500).json({ ok: false, error: 'Falta RESEND_API_KEY en Vercel' });
 
   const score = ans.filter((a, i) => a === CLAVE[i]).length;
   const filas = ans
     .map((a, i) => `Pregunta ${i + 1}: ${L[a]} ${a === CLAVE[i] ? '(correcta)' : `(incorrecta, correcta: ${L[CLAVE[i]]})`}`)
     .join('\n');
-  const text = `PRETEST - Prevención del cáncer\n\nNombre: ${nombre}\nFecha: ${fecha}\nPuntaje: ${score}/3\n\n${filas}\n\nObservaciones: ${obs || '-'}`;
+  const text = `POSTTEST - Prevención del cáncer\n\nNombre: ${nombre}\nFecha: ${fecha}\nPuntaje: ${score}/3\n\n${filas}\n\nObservaciones: ${obs || '-'}`;
   const html = `<h2>Pretest · Prevención del cáncer</h2><p><b>Nombre:</b> ${esc(nombre)}<br><b>Fecha:</b> ${esc(fecha)}<br><b>Puntaje:</b> ${score}/3</p><pre>${esc(filas)}</pre><p><b>Observaciones:</b> ${esc(obs || '-')}</p>`;
 
   try {
