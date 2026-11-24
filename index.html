@@ -49,7 +49,7 @@ e:"Muchos cánceres no dan síntomas al inicio; los hábitos y la tamización ay
 const L=["A","B","C"],app=document.getElementById("app");
 const S={step:"intro",i:0,ans:[],nombre:"",obs:"",fecha:new Date().toISOString().slice(0,10),status:"idle",score:0};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const head=`<header><small>PRETEST</small><h1>Hábitos y estilos de vida saludable para la prevención del cáncer</h1><p>Cuello uterino · Próstata · Colon</p></header>`;
+const head=`<header><small>POST TEST</small><h1>Hábitos y estilos de vida saludable para la prevención del cáncer</h1><p>Cuello uterino · Próstata · Colon</p></header>`;
 const render=()=>({intro,q:quiz,obs,done})[S.step]();
 
 function intro(){
@@ -87,7 +87,7 @@ async function enviar(){
 }
 function mailHref(){
  const c=`Nombre: ${S.nombre}\nFecha: ${S.fecha}\nRespuestas: 1-${L[S.ans[0]]}, 2-${L[S.ans[1]]}, 3-${L[S.ans[2]]}\nPuntaje: ${S.score}/${Q.length}\nObservaciones: ${S.obs||"-"}`;
- return "mailto:"+TO+"?subject="+encodeURIComponent("Pretest prevención del cáncer - "+S.nombre)+"&body="+encodeURIComponent(c);
+ return "mailto:"+TO+"?subject="+encodeURIComponent("Post test prevención del cáncer - "+S.nombre)+"&body="+encodeURIComponent(c);
 }
 function done(){
  const p=S.score/Q.length;
